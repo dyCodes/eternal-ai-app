@@ -3,25 +3,63 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	--primary-color: #a8ff73;
+	--secondary-color: #222;
+	--bg-color: #f3f1e5;
+	--bg-gradient: linear-gradient(
+		90deg,
+		#a8ff73 0%,
+		rgba(214, 246, 184, 0.441355) 99.99%,
+		rgba(243, 241, 229, 0.08) 100%
+	);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+	background-color: var(--bg-color);
+	font-family: 'Inter', sans-serif;
+	color: var(--secondary-color);
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+	.bg-primary {
+		background-color: var(--primary-color);
+	}
+	.bg-secondary {
+		background-color: var(--secondary-color);
+	}
+	.bg-gradient {
+		background: var(--bg-gradient);
+	}
+	.text-primary {
+		color: var(--primary-color);
+	}
+	.text-secondary {
+		color: var(--secondary-color);
+	}
+
+	/* Custom utilities */
+	.fx-center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.fx-between {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.fx-column {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.btn {
+		width: fit-content;
+		padding: 6px 18px;
+		color: #fff;
+		border-radius: 5px;
+		@apply select-none cursor-pointer transition-all hover:opacity-85;
+	}
 }
+
+/* Other styles */

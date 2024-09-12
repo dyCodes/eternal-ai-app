@@ -1,7 +1,7 @@
 import React from 'react';
-import Container from '../UI/Container';
+import Container from '../ui/Container';
 import Link from 'next/link';
-import Button from '../UI/Button/Button';
+import Button from '../ui/Button/Button';
 import { MdOutlinePhone } from 'react-icons/md';
 
 const Header = () => {

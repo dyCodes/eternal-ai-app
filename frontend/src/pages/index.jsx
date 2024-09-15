@@ -1,34 +1,67 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TextAreaBox, Container, InputBox, Button } from '@/components';
 import { useRouter } from 'next/router';
 import httpClient from '@/api/axios';
 import { toast } from 'react-toastify';
+import ImageUploadBox from '@/components/ui/ImageUploadBox';
 
 export default function Home() {
   const router = useRouter();
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (event) => {
+  useEffect(() => {
+    const userData = localStorage.getItem('userData');
+    // Set form data from local storage
+    if (userData) {
+      setFormData(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setFormData((prev) => ({
+      ...prev,
+      imageFile: file,
+      mimeType: file.type,
+      imagePreview: URL.createObjectURL(file),
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // console.log(formData);
+
+    // Save form data to local storage
+    const userData = {
+      ...formData,
+      imagePreview: null,
+      imageFile: null,
+      mimeType: null,
+    };
+    localStorage.setItem('userData', JSON.stringify(userData));
 
     try {
-      const response = await httpClient.post('/report', formData);
+      const newFormData = new FormData();
+      newFormData.append('image', formData.imageFile);
+      const Exceptions = ['imagePreview', 'imageFile'];
+      for (const key in formData) {
+        if (Exceptions.includes(key)) continue;
+        newFormData.append(key, formData[key]);
+      }
+
+      const response = await httpClient.post('/report', newFormData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       const { data, status } = response;
-      // console.log(response);
 
       if (status === 200) {
         const reportData = JSON.parse(data);
-        console.log(reportData);
-
-        // save report data to local storage
         localStorage.setItem('reportData', JSON.stringify(reportData));
         // Redirect to report page
         router.push('/report');
@@ -45,6 +78,14 @@ export default function Home() {
     <Container className=''>
       <form onSubmit={handleSubmit}>
         {/* FORM START */}
+        <div className='category'>
+          <h6>Image Upload</h6>
+
+          <ImageUploadBox
+            imagePreview={formData.imagePreview}
+            onChange={(event) => handleImageChange(event)}
+          />
+        </div>
 
         <div className='category'>
           <h6>symptoms</h6>
@@ -55,7 +96,8 @@ export default function Home() {
               placeholder='Details about itchiness, pain, burning, tingling, etc.'
               rows='10'
               value={formData.nature}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
+              required
             />
 
             <div>
@@ -64,21 +106,23 @@ export default function Home() {
                 label='Appearance'
                 placeholder='Color changes, swelling, scaling, oozing, or any other visible markers.'
                 value={formData.appearance}
-                onChange={(event) => handleChange(event)}
+                onChange={(event) => handleInputChange(event)}
+                required
               />
               <InputBox
                 name='duration'
                 label='Duration'
                 placeholder='How long the symptoms have been present. '
                 value={formData.duration}
-                onChange={(event) => handleChange(event)}
+                onChange={(event) => handleInputChange(event)}
+                required
               />
               <InputBox
                 name='changes'
                 label='Changes over time'
                 placeholder='Whether symptoms are getting worse, improving, or changing in nature. '
                 value={formData.changes}
-                onChange={(event) => handleChange(event)}
+                onChange={(event) => handleInputChange(event)}
               />
             </div>
           </div>
@@ -93,7 +137,8 @@ export default function Home() {
               label='Age'
               placeholder='Certain skin conditions are more common in specific age groups.'
               value={formData.age}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
+              required
             />
 
             <InputBox
@@ -101,7 +146,8 @@ export default function Home() {
               label='Gender'
               placeholder='Some skin issues are influenced by gender due to hormonal differences.'
               value={formData.gender}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
+              required
             />
 
             <TextAreaBox
@@ -110,15 +156,16 @@ export default function Home() {
               placeholder='Known allergies, particularly to medications, food, or environmental factors.'
               value={formData.allergies}
               rows={6}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
+
             <TextAreaBox
               name='medications'
               label='Medications'
               placeholder='Known medication, particularly to medications, food, or environmental factors.'
               value={formData.medications}
               rows={6}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
           </div>
         </div>
@@ -131,7 +178,7 @@ export default function Home() {
               label='Sun exposure'
               placeholder='Amount of daily or frequent Sun exposure.'
               value={formData.sun_exposure}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
             <TextAreaBox
               name='dietary_habit'
@@ -139,7 +186,7 @@ export default function Home() {
               placeholder='General diet, known allergies, recent changes in diet.'
               value={formData.dietary_habit}
               rows={6}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
           </div>
         </div>
@@ -152,7 +199,7 @@ export default function Home() {
               label='Location'
               placeholder='Specific body parts affected by the condition..'
               value={formData.location}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
 
             <InputBox
@@ -160,7 +207,7 @@ export default function Home() {
               label='Intensity'
               placeholder='Rate the level of pain or discomfort on a numerical scale.'
               value={formData.intensity}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
 
             <TextAreaBox
@@ -169,7 +216,7 @@ export default function Home() {
               placeholder='Whether the condition is localized or spreading, and how rapidly.'
               value={formData.spread}
               rows={6}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
 
             <InputBox
@@ -177,7 +224,7 @@ export default function Home() {
               label='Trigger'
               placeholder='Any known triggers that exacerbate the condition, such as stress, certain activities, or exposure to specific substances.'
               value={formData.trigger}
-              onChange={(event) => handleChange(event)}
+              onChange={(event) => handleInputChange(event)}
             />
           </div>
         </div>

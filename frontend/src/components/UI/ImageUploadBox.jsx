@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-const ImageUploadBox = ({ image, onChange }) => {
+const ImageUploadBox = ({ imagePreview, onChange }) => {
   // Handle image change
   const handleChange = (event) => {
     const file = event.target.files[0];
@@ -21,9 +21,9 @@ const ImageUploadBox = ({ image, onChange }) => {
       );
     }
 
-    // Check file size (e.g., max 3MB)
-    if (file.size > 3 * 1024 * 1024) {
-      return toast.error('File size should not exceed 3MB.');
+    // Check file size (e.g., max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      return toast.error('File size should not exceed 5MB.');
     }
 
     onChange(event);
@@ -35,9 +35,9 @@ const ImageUploadBox = ({ image, onChange }) => {
         htmlFor='dropzone-file'
         className='flex flex-col items-center justify-center w-full min-h-60 border border-secondary-940 border-dashed rounded-lg cursor-pointer bg-white'
       >
-        {image ? (
+        {imagePreview ? (
           <img
-            src={image}
+            src={imagePreview}
             className={'h-full max-h-80'}
             alt='condition-image'
           />
@@ -63,7 +63,7 @@ const ImageUploadBox = ({ image, onChange }) => {
               drop
             </p>
             <p className='text-xs text-gray-500'>
-              PNG, JPG, WEBP or HEIC (MAX. 1200x800px)
+              PNG, JPG, WEBP or HEIC (MAX: 5MB)
             </p>
           </div>
         )}

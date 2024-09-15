@@ -11,10 +11,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedFormData = localStorage.getItem('formData');
-    // Set formData from local storage
-    if (storedFormData) {
-      setFormData(JSON.parse(storedFormData));
+    const userData = localStorage.getItem('userData');
+    // Set form data from local storage
+    if (userData) {
+      setFormData(JSON.parse(userData));
     }
   }, []);
 
@@ -25,16 +25,12 @@ export default function Home() {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData((prev) => ({
-        ...prev,
-        image: reader.result,
-        mimeType: file.type,
-      }));
-    };
-    reader.readAsDataURL(file);
+    setFormData((prev) => ({
+      ...prev,
+      imageFile: file,
+      mimeType: file.type,
+      imagePreview: URL.createObjectURL(file),
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -42,17 +38,31 @@ export default function Home() {
     setLoading(true);
 
     // Save form data to local storage
-    localStorage.setItem('formData', JSON.stringify(formData));
+    const userData = {
+      ...formData,
+      imagePreview: null,
+      imageFile: null,
+      mimeType: null,
+    };
+    localStorage.setItem('userData', JSON.stringify(userData));
 
     try {
-      const response = await httpClient.post('/report', formData);
+      const newFormData = new FormData();
+      newFormData.append('image', formData.imageFile);
+      const Exceptions = ['imagePreview', 'imageFile'];
+      for (const key in formData) {
+        if (Exceptions.includes(key)) continue;
+        newFormData.append(key, formData[key]);
+      }
+
+      const response = await httpClient.post('/report', newFormData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       const { data, status } = response;
 
       if (status === 200) {
         const reportData = JSON.parse(data);
-        // Save report data to local storage
         localStorage.setItem('reportData', JSON.stringify(reportData));
-
         // Redirect to report page
         router.push('/report');
       }
@@ -72,7 +82,7 @@ export default function Home() {
           <h6>Image Upload</h6>
 
           <ImageUploadBox
-            image={formData.image}
+            imagePreview={formData.imagePreview}
             onChange={(event) => handleImageChange(event)}
           />
         </div>

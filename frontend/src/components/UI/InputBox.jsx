@@ -9,7 +9,7 @@ const InputBox = ({ name, value, label, onChange, ...rest }) => {
           name={name}
           value={value || ''}
           className='text-gray-900 text-sm block w-full p-2.5 bg-transparent'
-          onChange={(event) => onChange(event)}
+          onChange={onChange}
           {...rest}
         />
       </div>

@@ -9,7 +9,7 @@ const TextAreaBox = ({ name, value, label, onChange, ...rest }) => {
           name={name}
           value={value || ''}
           id={name}
-          onChange={(event) => onChange(event)}
+          onChange={onChange}
           className='text-gray-900 text-sm block w-full p-2.5 bg-transparent'
           {...rest}
         ></textarea>

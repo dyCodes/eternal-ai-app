@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
-import { Container, ReportCard } from "@/components";
-import { ChatBox } from "@/components";
-import { MdOutlineFileDownload } from "react-icons/md";
-import { Box, StyledButton } from "@/styles/report.styled";
-import { useRouter } from "next/router";
+import { useEffect, useState } from 'react';
+import { Container, ReportCard } from '@/components';
+import { ChatBox } from '@/components';
+import { MdOutlineFileDownload } from 'react-icons/md';
+import { Box, StyledButton } from '@/styles/report.styled';
+import { useRouter } from 'next/router';
+import { Preloader } from '@/components/ui/Preloader';
 
 const Report = () => {
   const router = useRouter();
   const [reportData, setReportData] = useState(null);
 
   useEffect(() => {
-    const storedReportData = localStorage.getItem("reportData");
+    const storedReportData = localStorage.getItem('reportData');
 
     if (!storedReportData) {
-      router.push("/"); // Redirect to home page if no report data
+      router.push('/'); // Redirect to home page if no report data
     } else {
-      console.log("storedReportData: ", storedReportData);
+      // console.log('storedReportData: ', storedReportData);
       setReportData(JSON.parse(storedReportData));
     }
   }, []);
 
-  // Ensure reportData is loaded before rendering
   if (!reportData) {
-    return <p>Loading...</p>;
+    return <Preloader />;
   }
 
   const {

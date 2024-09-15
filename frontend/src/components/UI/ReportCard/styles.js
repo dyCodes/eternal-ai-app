@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Card = styled.div`
-  align-self: start;
+  /* align-self: start; */
   border: 1px solid #000;
   border-radius: 0.3125rem;
   height: auto;

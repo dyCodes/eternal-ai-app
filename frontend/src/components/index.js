@@ -13,3 +13,4 @@ export { default as ReportInfoWrapper } from './ui/ReportInfoWrapper/ReportInfoW
 export { default as ReportUploadBox } from './ui/ReportUploadBox/ReportUploadBox';
 export { default as TextAreaBox } from './ui/TextAreaBox';
 export { default as World } from './ui/World';
+export { default as CaseStudyModal } from './ui/CaseStudyModal/CaseStudyModal';

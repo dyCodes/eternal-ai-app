@@ -62,22 +62,44 @@ body {
   .heading-4 {
     font-weight: 500;
     border-bottom: 1px solid #000;
-    padding: 0.75rem 1.375rem;
+    padding: 0.875rem 1.375rem;
     @apply md:text-lg;
   }
 
   .heading-3 {
-    font-size: clamp(1.625rem, 1.4167rem + 0.6667vw, 2rem);
-    font-weight: 500;
+    font-size: clamp(1.3rem, 1.4167rem + 0.6667vw, 1rem);
+    font-weight: 600;
     padding-bottom: 0.7rem;
     border-bottom: 1px solid #9c9c9c;
   }
 
   .btn {
     width: fit-content;
-    padding: 6px 18px;
+    padding: 0.5rem 1.125rem;
     border-radius: 5px;
     @apply select-none cursor-pointer transition-all hover:opacity-85;
+  }
+}
+
+.link {
+  color: #659945;
+  text-decoration: underline;
+  transition: all 0.3s;
+}
+
+/* Layout */
+/* NavBar */
+@media screen and (max-width: 767px) {
+  .mobile_nav {
+    left: 0;
+    right: 0;
+    @apply absolute py-4 px-4 top-[72px] w-[85%] mx-auto border-y border-gray-100 rounded-xl bg-[#fff] shadow-lg z-auto;
+  }
+  .mobile_nav .buttons {
+    @apply flex flex-col items-start divide-y divide-gray-300;
+  }
+  .mobile_nav .googleBtn {
+    @apply w-full mt-3 pt-3;
   }
 }
 

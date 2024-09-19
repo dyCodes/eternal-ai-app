@@ -14,6 +14,13 @@ import { Popover, PopoverTrigger } from '@radix-ui/react-popover';
 import PopoverContent from '../ui/Popover/Popover';
 import { BiLogOut } from 'react-icons/bi';
 
+/**
+ * The Header component is responsible for rendering the header section of the application.
+ * It displays the application's name and provides navigation buttons based on the current route.
+ *
+ * @returns {JSX.Element} - The rendered Header component.
+ */
+
 function Header() {
   const router = useRouter();
   const pathname = router.pathname;
@@ -28,8 +35,9 @@ function Header() {
     // Close the navbar when the route changes
     setOpenNavbar(false);
   }, [pathname]);
+
   return (
-    <header className='py-3.5 bg-gradient'>
+    <header className='py-3.5 bg-gradient shadow-sm'>
       <Container>
         <div className='fx-between'>
           <Link href='/'>

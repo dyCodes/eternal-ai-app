@@ -13,6 +13,10 @@ Eternal AI aims to:
 - **Quick Access to Dermatologists**: Facilitates easy access to professional care when needed.
 - **Educate on Skin Health**: The platform offers insights into skin health, helping users understand their symptoms better.
 
+## Screenshot
+
+![eternal-ai-screenshot](https://github.com/user-attachments/assets/4dabb40e-1d91-4bbd-84c4-fb61ec973ee5)
+
 ## Features
 
 - **AI-Driven Analysis**: Leveraging Google's powerful AI to analyze uploaded image and symptom data for accurate skin condition assessments.

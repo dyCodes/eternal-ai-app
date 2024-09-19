@@ -16,10 +16,10 @@ const Box = styled.div`
 `;
 
 const StyledButton = styled.button`
-  margin-top: 2.3125rem;
-  gap: 0.75rem;
+  margin-top: 2.5rem;
+  gap: 0.625rem;
   padding: 0.75rem 0.9375rem;
-  font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.25rem);
+  font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.0625rem);
   line-height: 143%;
   background-color: #fff;
   border: 1px solid #000000;

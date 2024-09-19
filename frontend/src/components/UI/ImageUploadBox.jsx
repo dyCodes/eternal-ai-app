@@ -1,46 +1,64 @@
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const ImageUploadBox = ({ imagePreview, onChange }) => {
+const allowedMimeTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/heic',
+];
+
+const ImageUploadBox = ({ imageFile, imagesPreview, onChange }) => {
   // Handle image change
   const handleChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+    let files = event.target.files;
+    if (!files.length) return;
 
-    // Allowed MIME types
-    const allowedMimeTypes = [
-      'image/jpeg',
-      'image/png',
-      'image/webp',
-      'image/heic',
-    ];
-
-    // Check file type
-    if (!allowedMimeTypes.includes(file.type)) {
-      return toast.error(
-        'Invalid file type. Only JPEG, PNG, WEBP, and HEIC are allowed.'
-      );
+    // Set limit to 3 images
+    if (files.length > 3) {
+      toast.error('You can only upload a maximum of 3 images.');
+      return;
     }
 
-    // Check file size (e.g., max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      return toast.error('File size should not exceed 5MB.');
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      // Validate file type
+      if (!allowedMimeTypes.includes(file.type)) {
+        toast.error(
+          `Invalid file type for ${file.name}. Only JPEG, PNG, WEBP, and HEIC are allowed.`
+        );
+        return (files = null);
+      }
+      // Validate file size
+      if (file.size > 3 * 1024 * 1024) {
+        toast.error(`File size for ${file.name} should not exceed 3MB.`);
+        return (files = null);
+      }
     }
 
-    onChange(event);
+    if (files) {
+      onChange(event);
+    }
   };
 
   return (
     <div className='flex items-center justify-center w-full'>
       <label
         htmlFor='dropzone-file'
-        className='flex flex-col items-center justify-center w-full min-h-60 border border-secondary-940 border-dashed rounded-lg cursor-pointer bg-white'
+        className='flex flex-col items-center justify-center w-full min-h-60 max-h-80 border border-secondary-940 border-dashed rounded-lg cursor-pointer bg-white'
       >
-        {imagePreview ? (
-          <img
-            src={imagePreview}
-            className={'h-full max-h-80'}
-            alt='condition-image'
-          />
+        {imageFile ? (
+          <div className='w-full px-2 flex justify-center overflow-hidden'>
+            {imagesPreview.map((image, index) => (
+              <div className='' key={index}>
+                <img
+                  src={image}
+                  className={'h-full max-h-80 object-cover px-1'}
+                  alt='upload image'
+                />
+              </div>
+            ))}
+          </div>
         ) : (
           <div className='flex flex-col items-center justify-center pt-4 pb-5'>
             <svg
@@ -63,7 +81,7 @@ const ImageUploadBox = ({ imagePreview, onChange }) => {
               drop
             </p>
             <p className='text-xs text-gray-500'>
-              PNG, JPG, WEBP or HEIC (MAX: 5MB)
+              PNG, JPG, WEBP or HEIC (MAX: 3MB)
             </p>
           </div>
         )}
@@ -72,6 +90,7 @@ const ImageUploadBox = ({ imagePreview, onChange }) => {
           id='dropzone-file'
           type='file'
           className='hidden'
+          multiple={true}
           onChange={handleChange}
         />
       </label>

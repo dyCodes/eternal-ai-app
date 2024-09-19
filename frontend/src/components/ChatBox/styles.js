@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ChatContainer = styled.div`
   margin: 3.75rem 0;
@@ -12,19 +12,27 @@ export const ChatContainer = styled.div`
     grid-template-rows: 1fr;
 
     .chats {
-      padding: 1.875rem 1.25rem;
+      padding: 1.875rem 1.25rem 0.125rem;
+      height: 380px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+
+      .message {
+        border-radius: 0.3125rem;
+        font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1rem);
+        line-height: 143%;
+        max-width: 688px;
+        margin-bottom: 1.375rem;
+      }
 
       .robot-box {
         justify-content: unset;
         gap: 0.9375rem;
 
-        p {
+        .message {
           background: rgba(168, 255, 115, 0.39);
-          border-radius: 0.3125rem;
-          padding: 1.25rem 1.5rem;
-          font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.25rem);
-          line-height: 143%;
           max-width: 688px;
+          padding: 1rem 1.25rem;
         }
       }
 
@@ -32,24 +40,11 @@ export const ChatContainer = styled.div`
         display: flex;
         align-items: center;
 
-        .user-message {
-          justify-content: unset;
+        .message {
+          background: #fff;
           max-width: 439px;
-          margin: 2.8125rem 0;
+          padding: 0.625rem 1.125rem;
           margin-left: auto;
-          gap: 0.9375rem;
-
-          svg {
-            cursor: pointer;
-          }
-
-          p {
-            background: #fff;
-            border-radius: 0.3125rem;
-            padding: 1.25rem 1.5rem;
-            font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.25rem);
-            line-height: 143%;
-          }
         }
       }
     }
@@ -62,8 +57,9 @@ export const ChatContainer = styled.div`
       svg {
         color: #9c9c9c;
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 0;
+        bottom: 0;
+        margin-block: auto;
       }
 
       .arrow-icon {
@@ -72,21 +68,21 @@ export const ChatContainer = styled.div`
 
       .menu-icon {
         right: 1.375rem;
+        color: #222;
       }
 
       input {
-        padding: 1.1875rem 3.9375rem;
+        padding: 0.9375rem 3.875rem;
         background-color: #fff;
         width: 100%;
         border: none;
         outline: none;
-        font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.25rem);
+        font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.125rem);
         line-height: 143%;
-        font-weight: 500;
 
         &::placeholder {
           color: #9c9c9c;
-          font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1.25rem);
+          font-size: clamp(1rem, 0.8611rem + 0.4444vw, 1rem);
         }
       }
     }

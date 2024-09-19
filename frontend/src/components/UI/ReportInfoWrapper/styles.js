@@ -1,24 +1,23 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledSection = styled.section`
   .content {
     padding: clamp(1.5rem, 1.2222rem + 0.8889vw, 2rem) 0;
 
     p {
-      font-size: clamp(1.1875rem, 1.0833rem + 0.3333vw, 1.375rem);
+      font-size: clamp(1.1875rem, 1.0833rem + 0.3333vw, 1rem);
       font-weight: 300;
     }
 
     img {
-      width: 225px;
       height: 100%;
-      border: 2px solid #cbcbcb;
-      border-radius: 31px;
+      border: 1px solid #cbcbcb;
+      border-radius: 30px;
     }
 
     h6 {
-      font-size: clamp(1.1875rem, 1.0833rem + 0.3333vw, 1.375rem);
-      padding: 0.2rem;
+      font-size: clamp(1.1rem, 1.0833rem + 0.3333vw, 1.125rem);
+      padding: 3px 10px;
       background-color: var(--primary-color);
       width: max-content;
     }

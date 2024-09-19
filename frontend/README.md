@@ -1,40 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Eternal AI
+
+## Overview
+
+Eternal AI provides an innovative solution by offering immediate, preliminary assessments of skin conditions through AI-driven analysis. Users can upload an image and provide symptom data, receiving real-time feedback on potential skin conditions. This not only expedites the process of identifying skin issues but also educates users on skin health, guiding them on when and how to seek professional care. Our solution is tailored for scenarios where dermatological appointments might be inaccessible, delayed, or where patients are unwilling to make physical appointments.
+
+## What It Does
+
+Eternal AI aims to:
+
+- **Expedite Skin Condition Identification**: Users receive instant feedback on potential skin conditions based on the data they provide.
+- **Support Decision-Making**: By providing preliminary assessments, users can make informed decisions about seeking professional care.
+- **Quick Access to Dermatologists**: Facilitates easy access to professional care when needed.
+- **Educate on Skin Health**: The platform offers insights into skin health, helping users understand their symptoms better.
+
+## Screenshot
+
+![eternal-ai-screenshot](https://github.com/user-attachments/assets/4dabb40e-1d91-4bbd-84c4-fb61ec973ee5)
+
+## Features
+
+- **AI-Driven Analysis**: Leveraging Google's powerful AI to analyze uploaded image and symptom data for accurate skin condition assessments.
+- **Generate Report**: Provides a detailed report on possible conditions, causes, and skincare recommendations.
+- **Access to Dermatologists**: Enables users to easily book appointments with dermatologists based on the AI's analysis.
+- **AI Chatbot**: An interactive chatbot that answers questions, provides guidance, and enhances user experience with a friendly, informative tone.
+
+## How We Built It
+
+- **Frontend**: React/Next.js, Tailwind CSS
+- **Backend**: Node.js/Express
+- **AI Integration**: Google Generative AI (Gemini), providing powerful AI-driven skin condition assessments based on uploaded image and symptom data.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js
+- npm/yarn
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/dyCodes/eternal-ai-app.git
+   ```
+
+2. **Navigate to the project directory**:
+
+   ```bash
+   cd eternal-ai-app/frontend
+   ```
+
+3. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+4. **Set up environment variables**:
+   - Create a `.env.local` file in the root directory.
+   - Add the following environment variables:
+     ```bash
+     NEXT_PUBLIC_API_URL=http://localhost:3000/api
+     NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=your-google-generative-ai-api-key
+     ```
+
+### Running the Application
+
+To start the application in development mode:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application should now be running on `http://localhost:3000`.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Deployment
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Eternal AI can be deployed on platforms like Vercel, which are well-suited for Next.js applications. Ensure that your environment variables are configured correctly for the production environment.

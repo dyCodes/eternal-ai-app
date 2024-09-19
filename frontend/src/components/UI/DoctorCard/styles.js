@@ -63,7 +63,7 @@ export const Card = styled.div`
       p {
         display: flex;
         align-items: center;
-        font-size: 0.8438rem;
+        font-size: 14px;
         font-weight: 500;
         color: #9c9c9c;
 

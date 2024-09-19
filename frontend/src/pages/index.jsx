@@ -4,16 +4,19 @@ import { useRouter } from 'next/router';
 import httpClient from '@/api/axios';
 import { toast } from 'react-toastify';
 import ImageUploadBox from '@/components/ui/ImageUploadBox';
+import { useAuthContext } from '@/context/AuthContext';
 
 export default function Home() {
   const router = useRouter();
   const [formData, setFormData] = useState({});
+  const [imagesPreview, setImagesPreview] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     // Set form data from local storage
-    if (userData) {
+    if (user && userData) {
       setFormData(JSON.parse(userData));
     }
   }, []);
@@ -25,12 +28,18 @@ export default function Home() {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    setFormData((prev) => ({
-      ...prev,
-      imageFile: file,
-      mimeType: file.type,
-      imagePreview: URL.createObjectURL(file),
-    }));
+    setFormData((prev) => ({ ...prev, imageFile: file, mimeType: file.type }));
+
+    setImagesPreview([]);
+    // Convert the image to base64
+    for (let i = 0; i < event.target.files.length; i++) {
+      const file = event.target.files[i];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagesPreview((prev) => [...prev, reader.result]);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -40,18 +49,18 @@ export default function Home() {
     // Save form data to local storage
     const userData = {
       ...formData,
-      imagePreview: null,
       imageFile: null,
       mimeType: null,
+      date: new Date().toDateString(),
+      name: user?.name,
     };
     localStorage.setItem('userData', JSON.stringify(userData));
 
     try {
       const newFormData = new FormData();
       newFormData.append('image', formData.imageFile);
-      const Exceptions = ['imagePreview', 'imageFile'];
       for (const key in formData) {
-        if (Exceptions.includes(key)) continue;
+        if (['imageFile'].includes(key)) continue;
         newFormData.append(key, formData[key]);
       }
 
@@ -63,6 +72,10 @@ export default function Home() {
       if (status === 200) {
         const reportData = JSON.parse(data);
         localStorage.setItem('reportData', JSON.stringify(reportData));
+        localStorage.setItem(
+          'reportImages',
+          JSON.stringify([imagesPreview[0]])
+        );
         // Redirect to report page
         router.push('/report');
       }
@@ -82,18 +95,20 @@ export default function Home() {
           <h6>Image Upload</h6>
 
           <ImageUploadBox
-            imagePreview={formData.imagePreview}
+            imageFile={formData.imageFile}
+            imagesPreview={imagesPreview}
             onChange={(event) => handleImageChange(event)}
           />
         </div>
 
         <div className='category'>
           <h6>symptoms</h6>
+
           <div className='formSection'>
             <TextAreaBox
               name='nature'
               label='Nature of symptoms'
-              placeholder='Details about itchiness, pain, burning, tingling, etc.'
+              placeholder='Description of the symptoms, including pain, itching, burning, or any other sensations.'
               rows='10'
               value={formData.nature}
               onChange={(event) => handleInputChange(event)}
@@ -123,6 +138,7 @@ export default function Home() {
                 placeholder='Whether symptoms are getting worse, improving, or changing in nature. '
                 value={formData.changes}
                 onChange={(event) => handleInputChange(event)}
+                required
               />
             </div>
           </div>
@@ -153,7 +169,7 @@ export default function Home() {
             <TextAreaBox
               name='allergies'
               label='Allergies'
-              placeholder='Known allergies, particularly to medications, food, or environmental factors.'
+              placeholder='Known allergies, particularly to medications, foods, or environmental factors.'
               value={formData.allergies}
               rows={6}
               onChange={(event) => handleInputChange(event)}
@@ -162,7 +178,7 @@ export default function Home() {
             <TextAreaBox
               name='medications'
               label='Medications'
-              placeholder='Known medication, particularly to medications, food, or environmental factors.'
+              placeholder='Known medications, including prescription, over-the-counter, or herbal supplements.'
               value={formData.medications}
               rows={6}
               onChange={(event) => handleInputChange(event)}
@@ -172,20 +188,38 @@ export default function Home() {
 
         <div className='category'>
           <h6>Lifestyle </h6>
+
           <div className='formSection'>
             <InputBox
               name='sun_exposure'
               label='Sun exposure'
-              placeholder='Amount of daily or frequent Sun exposure.'
+              placeholder='Rate the level of sun exposure on a scale of 1-10.'
               value={formData.sun_exposure}
               onChange={(event) => handleInputChange(event)}
             />
+
+            <InputBox
+              label='Occupational hazards'
+              name='occupational_hazards'
+              placeholder='Any known occupational hazards, such as exposure to chemicals, extreme temperatures, or physical strain.'
+              value={formData.occupational_hazards}
+              onChange={(event) => handleInputChange(event)}
+            />
+
             <TextAreaBox
               name='dietary_habit'
               label='Dietary habits'
-              placeholder='General diet, known allergies, recent changes in diet.'
+              placeholder='General dietary habits, including any known food intolerances or restrictions.'
               value={formData.dietary_habit}
               rows={6}
+              onChange={(event) => handleInputChange(event)}
+            />
+
+            <InputBox
+              label='Recent Travels'
+              name='recent_travels'
+              placeholder='Recent travels or exposure to new environments.'
+              value={formData.recent_travels}
               onChange={(event) => handleInputChange(event)}
             />
           </div>
@@ -193,6 +227,7 @@ export default function Home() {
 
         <div className='category !mb-3'>
           <h6>Area of localization</h6>
+
           <div className='formSection'>
             <InputBox
               name='location'
@@ -200,22 +235,22 @@ export default function Home() {
               placeholder='Specific body parts affected by the condition..'
               value={formData.location}
               onChange={(event) => handleInputChange(event)}
+              required
             />
 
             <InputBox
               name='intensity'
               label='Intensity'
-              placeholder='Rate the level of pain or discomfort on a numerical scale.'
+              placeholder='Rate the intensity of the symptoms on a scale of 1-10.'
               value={formData.intensity}
               onChange={(event) => handleInputChange(event)}
             />
 
-            <TextAreaBox
+            <InputBox
               name='spread'
               label='Spread'
-              placeholder='Whether the condition is localized or spreading, and how rapidly.'
+              placeholder='Rate the spread of the symptoms on a scale of 1-10.'
               value={formData.spread}
-              rows={6}
               onChange={(event) => handleInputChange(event)}
             />
 
